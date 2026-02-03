@@ -108,13 +108,66 @@ const Employees = () => {
   };
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    if (name === "phone") {
+      if (/^\d{0,10}$/.test(value)) {
+        setFormData((prev) => ({ ...prev, phone: value }));
+      }
+      return;
+    }
+    const textOnlyFields = [
+      "firstName",
+      "lastName",
+      "department",
+      "designation",
+    ];
+    if (textOnlyFields.includes(name)) {
+      if (/^[a-zA-Z\s]*$/.test(value)) {
+        setFormData((prev) => ({ ...prev, [name]: value }));
+      }
+      return;
+    }
+
+    if (name === "joiningDate") {
+      const selectedDate = new Date(value);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      if (selectedDate <= today) {
+        setFormData((prev) => ({ ...prev, joiningDate: value }));
+      }
+      return;
+    }
+
+    // DEFAULT (email, role etc.)
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
   const handleAddressChange = (e) => {
     const { name, value } = e.target;
+    if (name === "pincode") {
+      if (/^\d{0,6}$/.test(value)) {
+        setFormData((prev) => ({
+          ...prev,
+          address: { ...prev.address, pincode: value },
+        }));
+      }
+      return;
+    }
+    if (name === "city" || name === "state") {
+      if (/^[a-zA-Z\s]*$/.test(value)) {
+        setFormData((prev) => ({
+          ...prev,
+          address: { ...prev.address, [name]: value },
+        }));
+      }
+    }
+    if (name === "street") {
+      if (/^[a-zA-Z0-9\s]*$/.test(value)) {
+        setFormData((prev) => ({
+          ...prev,
+          address: { ...prev.address, street: value },
+        }));
+      }
+    }
     setFormData((prev) => ({
       ...prev,
       address: {
@@ -362,7 +415,18 @@ const Employees = () => {
 
                     {/* Joining Date */}
                     <TableCell>
-                      <Typography variant="h6">{item.joiningDate}</Typography>
+                      <Typography variant="h6">
+                        {item.joiningDate
+                          ? new Date(item.joiningDate).toLocaleDateString(
+                              "en-IN",
+                              {
+                                day: "2-digit",
+                                month: "short",
+                                year: "numeric",
+                              },
+                            )
+                          : "_"}
+                      </Typography>
                     </TableCell>
 
                     {/* Address (SINGLE COLUMN ✅) */}

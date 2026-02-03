@@ -10,12 +10,21 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
+import AddIcon from "@mui/icons-material/Add";
 import apiUrl from "../api";
 
 export default function Profile() {
   const [isEdit, setIsEdit] = useState(false);
   const [imageFile, setImageFile] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const labelProps = (value) => ({
+    shrink: Boolean(value),
+    sx: {
+      backgroundColor: "background.paper",
+      px: 0.5,
+    },
+  });
 
   const [profile, setProfile] = useState({
     firstName: "",
@@ -63,6 +72,45 @@ export default function Profile() {
   // ================= HANDLE INPUT =================
   const handleChange = (e) => {
     const { name, value } = e.target;
+    if (name === "phone") {
+      if (/^\d{0,10}$/.test(value)) {
+        setProfile((prev) => ({ ...prev, [name]: value }));
+      }
+      return;
+    }
+    // if (name === "pincode") {
+    //   if (/^\d{0,6}$/.test(value)) {
+    //     setProfile((prev) => ({ ...prev.address, pincode: value }));
+    //   }
+    //   return;
+    // }
+
+    // const textFields = ["firstName", "lastName", "department", "designation"];
+    // if (textFields.includes(name)) {
+    //   if (/^[a-zA-Z\s]*$/.test(value)) {
+    //     setProfile((prev) => ({ ...prev, [name]: value }));
+    //   }
+    // }
+    if (name === "street") {
+      if (/^[a-zA-Z0-9\s]*$/.test(value)) {
+        setProfile((prev) => ({
+          ...prev,
+          address: { ...prev.address, street: value },
+        }));
+      }
+    }
+    if (name === "joiningDate") {
+      const selectedDate = new Date(value);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      if (selectedDate <= today) {
+        setProfile((prev) => ({ ...prev, joiningDate: value }));
+      } else {
+        alert("Future date allowed nahi hai ");
+      }
+      return;
+    }
+
     setProfile((prev) => ({
       ...prev,
       [name]: value,
@@ -115,6 +163,10 @@ export default function Profile() {
 
     return res.data;
   };
+  const handleRemove = () => {
+    setPreviewImage(null);
+    setSelectedImage(null);
+  };
 
   // ================= SAVE =================
   const handleSave = async () => {
@@ -152,11 +204,17 @@ export default function Profile() {
     .join(", ");
 
   return (
-    <Box sx={{ maxWidth: 1100, mx: "auto", mt: 4 }}>
+    <Box
+      sx={{
+        width: "fit-content",
+        mx: "auto",
+        mt: 4,
+      }}
+    >
       <Paper sx={{ p: 4, borderRadius: 3 }}>
         {/* HEADER */}
-        <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}>
-          <Box sx={{ position: "relative" }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 0 }}>
+          <Box sx={{ position: "relative", mb: 0 }}>
             <Avatar
               src={
                 previewImage
@@ -165,175 +223,291 @@ export default function Profile() {
                     ? `http://192.168.1.48:3000/uploads/${profile?.photo}`
                     : "/default-avatar.png"
               }
-              sx={{ width: 72, height: 72 }}
+              sx={{ width: 72, height: 72, mb: 0 }}
             />
-            {isEdit && (
-              <IconButton
-                component="label"
+          </Box>
+
+          {/* <Button variant="Black-outlined" onClick={handleRemove}>
+            {" "}
+            Remove
+          </Button> */}
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            // alignItems: "center",
+            gap: 3,
+            // justifyContent: "flex-end",
+            mt: 2,
+            mb: 0,
+          }}
+        >
+          <Button variant="black" component="label" sx={{ minWidth: 120 }}>
+            <AddIcon sx={{ color: "#fff", fontSize: 15, mr: 0.5 }} />
+            Upload Image
+            <input
+              hidden
+              accept="image/*"
+              type="file"
+              onChange={handleImageChange}
+            />
+          </Button>
+          {/* ACTION */}
+          <Box sx={{ mt: 0, mb: 0 }}>
+            {!isEdit ? (
+              <Button
+                variant="black"
                 sx={{
-                  position: "absolute",
-                  bottom: 0,
-                  right: 0,
-                  background: "#fff",
-                  border: "1px solid #ccc",
+                  minWidth: 120,
+                  alignItems: "center", // icon aur text vertically center
+                  justifyContent: "center",
                 }}
+                onClick={() => setIsEdit(true)}
               >
-                <CameraAltIcon sx={{ fontSize: 16 }} />
-                <input
-                  hidden
-                  accept="image/*"
-                  type="file"
-                  onChange={handleImageChange}
-                />
-              </IconButton>
+                Edit Profile
+              </Button>
+            ) : (
+              <Button
+                variant="black"
+                sx={{ minWidth: 120 }}
+                onClick={handleSave}
+              >
+                Save
+              </Button>
             )}
           </Box>
         </Box>
 
-        <Typography variant="h6" fontWeight={600} mb={3}>
+        <Typography variant="h6" mb={2} sx={{ mt: 2 }}>
           Personal Information
         </Typography>
 
         {/* FORM */}
         <Grid container spacing={3}>
+          {/* FIRST NAME */}
           <Grid item xs={12} md={4}>
+            <Typography variant="body2" sx={{ mb: 0.5 }}>
+              First name
+            </Typography>
             <TextField
-              label="First Name"
               name="firstName"
               fullWidth
               disabled={!isEdit}
-              value={profile.firstName}
+              value={profile.firstName || ""}
               onChange={handleChange}
+              placeholder="Enter first name"
+              InputProps={{ sx: { borderRadius: 2 } }}
             />
           </Grid>
 
+          {/* LAST NAME */}
           <Grid item xs={12} md={4}>
+            <Typography variant="body2" sx={{ mb: 0.5 }}>
+              Last name
+            </Typography>
             <TextField
-              label="Last Name"
               name="lastName"
               fullWidth
               disabled={!isEdit}
-              value={profile.lastName}
+              value={profile.lastName || ""}
               onChange={handleChange}
+              placeholder="Enter last name"
+              InputProps={{ sx: { borderRadius: 2 } }}
             />
           </Grid>
 
+          {/* CONTACT */}
           <Grid item xs={12} md={4}>
+            <Typography variant="body2" sx={{ mb: 0.5 }}>
+              Contact No
+            </Typography>
             <TextField
-              label="Contact No"
               name="phone"
               fullWidth
               disabled={!isEdit}
-              value={profile.phone}
+              value={profile.phone || ""}
               onChange={handleChange}
+              placeholder="Enter contact number"
+              InputProps={{ sx: { borderRadius: 2 } }}
             />
           </Grid>
-
+        </Grid>
+        <Typography
+          variant="h6"
+          sx={{
+            mt: 5,
+            mb: 3,
+            fontWeight: 600,
+          }}
+        >
+          Company Details
+        </Typography>
+        <Grid container spacing={3}>
           <Grid item xs={12} md={4}>
-            <TextField label="Email" fullWidth disabled value={profile.email} />
-          </Grid>
-
-          <Grid item xs={12} md={4}>
+            <Typography variant="body2" sx={{ mb: 0.5 }}>
+              Joining Date
+            </Typography>
             <TextField
-              label="Department"
+              type="date"
               fullWidth
               disabled
-              value={profile.department}
+              placeholder=" Your Joining Date"
+              value={profile.joiningDate || ""}
+              InputProps={{
+                sx: { borderRadius: 2, backgroundColor: "#f5f5f5" },
+              }}
+            />
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <Typography variant="body2" sx={{ mb: 0.5 }}>
+              Designation
+            </Typography>
+            <TextField
+              fullWidth
+              disabled
+              placeholder=" Your Designation"
+              value={profile.designation || ""}
+              InputProps={{
+                sx: { borderRadius: 2, backgroundColor: "#f5f5f5" },
+              }}
             />
           </Grid>
 
           <Grid item xs={12} md={4}>
+            <Typography variant="body2" sx={{ mb: 0.5 }}>
+              Email
+            </Typography>
             <TextField
-              label="Designation"
               fullWidth
               disabled
-              value={profile.designation}
+              placeholder="Email"
+              value={profile.email || ""}
+              InputProps={{
+                sx: { borderRadius: 2, backgroundColor: "#f5f5f5" },
+              }}
             />
           </Grid>
 
+          {/* DEPARTMENT */}
           <Grid item xs={12} md={4}>
+            <Typography variant="body2" sx={{ mb: 0.5 }}>
+              Department
+            </Typography>
             <TextField
-              label="Joining Date"
               fullWidth
               disabled
-              value={profile.joiningDate}
-            />
-          </Grid>
-
-          {/* ADDRESS FIELDS */}
-          <Grid item xs={12} md={3}>
-            <TextField
-              label="Street"
-              name="street"
-              fullWidth
-              disabled={!isEdit}
-              value={profile.address?.street || ""}
-              onChange={(e) =>
-                setProfile((prev) => ({
-                  ...prev,
-                  address: { ...prev.address, street: e.target.value },
-                }))
-              }
-            />
-          </Grid>
-
-          <Grid item xs={12} md={3}>
-            <TextField
-              label="City"
-              name="city"
-              fullWidth
-              disabled={!isEdit}
-              value={profile.address?.city || ""}
-              onChange={(e) =>
-                setProfile((prev) => ({
-                  ...prev,
-                  address: { ...prev.address, city: e.target.value },
-                }))
-              }
-            />
-          </Grid>
-
-          <Grid item xs={12} md={3}>
-            <TextField
-              label="State"
-              name="state"
-              fullWidth
-              disabled={!isEdit}
-              value={profile.address?.state || ""}
-              onChange={(e) =>
-                setProfile((prev) => ({
-                  ...prev,
-                  address: { ...prev.address, state: e.target.value },
-                }))
-              }
-            />
-          </Grid>
-
-          <Grid item xs={12} md={3}>
-            <TextField
-              label="Pincode"
-              name="pincode"
-              fullWidth
-              disabled={!isEdit}
-              value={profile.address?.pincode || ""}
-              onChange={(e) =>
-                setProfile((prev) => ({
-                  ...prev,
-                  address: { ...prev.address, pincode: e.target.value },
-                }))
-              }
+              placeholder=" Your Department"
+              value={profile.department || ""}
+              InputProps={{
+                sx: { borderRadius: 2, backgroundColor: "#f5f5f5" },
+              }}
             />
           </Grid>
         </Grid>
 
-        {/* ACTION */}
-        <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 4 }}>
-          {!isEdit ? (
-            <Button onClick={() => setIsEdit(true)}>Edit Profile</Button>
-          ) : (
-            <Button onClick={handleSave}>Save</Button>
-          )}
-        </Box>
+        <Typography
+          variant="h6"
+          sx={{
+            mt: 5,
+            mb: 3,
+            fontWeight: 600,
+          }}
+        >
+          Address Information
+        </Typography>
+        <Grid container spacing={3}>
+          {/* STREET */}
+          <Grid item xs={12} md={3}>
+            <Typography variant="body2" sx={{ mb: 0.5 }}>
+              Street
+            </Typography>
+            <TextField
+              fullWidth
+              disabled={!isEdit}
+              value={profile.address?.street || ""}
+              placeholder="Enter street"
+              InputProps={{ sx: { borderRadius: 2 } }}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (/^[a-zA-Z0-9\s]*$/.test(value)) {
+                  setProfile((prev) => ({
+                    ...prev,
+                    address: { ...prev.address, street: value },
+                  }));
+                }
+                // }
+              }}
+            />
+          </Grid>
+
+          {/* CITY */}
+          <Grid item xs={12} md={3}>
+            <Typography variant="body2" sx={{ mb: 0.5 }}>
+              City
+            </Typography>
+            <TextField
+              fullWidth
+              disabled={!isEdit}
+              value={profile.address?.city || ""}
+              placeholder="Enter city"
+              InputProps={{ sx: { borderRadius: 2 } }}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (/^[a-zA-Z\s]*$/.test(value)) {
+                  setProfile((prev) => ({
+                    ...prev,
+                    address: { ...prev.address, city: e.target.value },
+                  }));
+                }
+              }}
+            />
+          </Grid>
+
+          {/* STATE */}
+          <Grid item xs={12} md={3}>
+            <Typography variant="body2" sx={{ mb: 0.5 }}>
+              State
+            </Typography>
+            <TextField
+              fullWidth
+              disabled={!isEdit}
+              value={profile.address?.state || ""}
+              placeholder="Enter state"
+              InputProps={{ sx: { borderRadius: 2 } }}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (/^[a-zA-Z\s]*$/.test(value)) {
+                  setProfile((prev) => ({
+                    ...prev,
+                    address: { ...prev.address, city: e.target.value },
+                  }));
+                }
+              }}
+            />
+          </Grid>
+
+          {/* PINCODE */}
+          <Grid item xs={12} md={3}>
+            <Typography variant="body2" sx={{ mb: 0.5 }}>
+              Pincode
+            </Typography>
+            <TextField
+              fullWidth
+              disabled={!isEdit}
+              value={profile.address?.pincode || ""}
+              placeholder="Enter pincode"
+              InputProps={{ sx: { borderRadius: 2 } }}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value === "" || /^\d{0,6}$/.test(value))
+                  setProfile((prev) => ({
+                    ...prev,
+                    address: { ...prev.address, pincode: e.target.value },
+                  }));
+              }}
+            />
+          </Grid>
+        </Grid>
       </Paper>
     </Box>
   );
