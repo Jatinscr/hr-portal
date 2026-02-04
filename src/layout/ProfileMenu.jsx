@@ -138,7 +138,11 @@ function ProfileMenu({ anchorEl, open, onClose }) {
               }}
             >
               {/* onClick={() => navigate("/Profile")} */}
-              <ListItemIcon sx={{ cursor: "pointer" }}>
+
+              <ListItemIcon
+                onClick={() => navigate("/settings/Profile")}
+                sx={{ cursor: "pointer" }}
+              >
                 <SettingsOutlinedIcon sx={{ fontSize: 22 }} />
                 <ListItemText
                   primary="Account Setting"

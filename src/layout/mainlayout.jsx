@@ -14,9 +14,11 @@ import Account from "../pages/Account";
 import ForgotPassword from "../pages/ForgotPassword";
 import OtpVerification from "../pages/OtpVerification";
 import Holidays from "../pages/Holidays";
+import SettingLayout from "../SettingsLayout/SettingLayout";
+import Profile from "../SettingsPages/Profile";
 
 import PrivateRoute from "../Route/index"; // ✅ import
-import Profile from "../profile/Profile";
+// import Profile from "../pages/Profile";
 
 const MainLayout = () => {
   const [open, setOpen] = useState(true);
@@ -44,7 +46,7 @@ const MainLayout = () => {
               path="/dashboard"
               element={
                 // <PrivateRoute>
-                  <Dashboard />
+                <Dashboard />
                 // </PrivateRoute>
               }
             />
@@ -107,9 +109,18 @@ const MainLayout = () => {
             <Route
               path="/Profile"
               element={
-                // <PrivateRoute>
+                <PrivateRoute>
                   <Profile />
-                // </PrivateRoute>
+                </PrivateRoute>
+              }
+            />
+
+            <Route
+              path="/settings/*"
+              element={
+                <PrivateRoute>
+                  <SettingLayout />
+                </PrivateRoute>
               }
             />
 

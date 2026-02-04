@@ -425,7 +425,7 @@ const Employees = () => {
                                 year: "numeric",
                               },
                             )
-                          : "_"}
+                          : "N\A"}
                       </Typography>
                     </TableCell>
 
