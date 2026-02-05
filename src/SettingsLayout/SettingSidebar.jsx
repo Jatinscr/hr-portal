@@ -19,7 +19,7 @@ const SettingSidebar = () => {
   const linkStyle = ({ isActive }) => ({
     backgroundColor: isActive ? "#f5f5f5" : "transparent",
     borderRadius: "8px",
-    marginBottom: "6px",
+    // marginBottom: "0px",
   });
   return (
     <>
@@ -37,69 +37,70 @@ const SettingSidebar = () => {
           Settings
         </Typography>
         <Divider sx={{ mb: 2 }} />
-        <List>
-          <ListItemButton
-            component={NavLink}
-            to="/settings/profile"
-            style={linkStyle}
-          >
-            <PersonOutlinedIcon />
-            <ListItemText primary="Profile" />
-          </ListItemButton>
-        </List>
-        <List>
-          <ListItemButton
-            component={NavLink}
-            to="/settings/profile/basic-info"
-            style={linkStyle}
-          >
-            <InfoOutlinedIcon />
-            <ListItemText primary="Basic Information" />
-          </ListItemButton>
-        </List>
+        {/* <List> */}
         <ListItemButton
           component={NavLink}
-          to="/settings/profile/projects"
+          to="/settings/PersonalInfo"
+          end
           style={linkStyle}
         >
-          <RocketOutlinedIcon />
+          <PersonOutlinedIcon  sx={{mr:1}}/>
+          <ListItemText primary="Personal Information" />
+        </ListItemButton>
+        {/* </List> */}
+        {/* <List> */}
+        <ListItemButton
+          component={NavLink}
+          to="/settings/PersonalInfo/basic-info"
+          style={linkStyle}
+        >
+          <InfoOutlinedIcon sx={{mr:1}} />
+          <ListItemText primary="Basic Information" />
+        </ListItemButton>
+        {/* </List> */}
+        <ListItemButton
+          component={NavLink}
+          to="/settings/PersonalInfo/projects"
+          style={linkStyle}
+        >
+          <RocketOutlinedIcon sx={{mr:1}} />
           <ListItemText primary="Projects" />
         </ListItemButton>
 
         <ListItemButton
           component={NavLink}
-          to="/settings/profile/skills"
+          to="/settings/PersonalInfo/skills"
           style={linkStyle}
         >
-          <PsychologyOutlinedIcon />
+          <PsychologyOutlinedIcon  sx={{mr:1}}/>
 
           <ListItemText primary="Skills & Certificates" />
         </ListItemButton>
 
         <ListItemButton
           component={NavLink}
-          to="/settings/profile/experience"
+          to="/settings/PersonalInfo/experience"
           style={linkStyle}
         >
-          <WorkOutlineOutlinedIcon />
+          <WorkOutlineOutlinedIcon  sx={{mr:1}}/>
           <ListItemText primary="Experience" />
         </ListItemButton>
 
         <ListItemButton
           component={NavLink}
-          to="/settings/profile/education"
+          to="/settings/PersonalInfo/education"
           style={linkStyle}
         >
-          <SchoolIcon />
+          <SchoolIcon  sx={{mr:1}}/>
           <ListItemText primary="Education" />
         </ListItemButton>
 
         <ListItemButton
           component={NavLink}
-          to="/settings/profile/other-info"
+          to="/settings/PersonalInfo/other-info"
           style={linkStyle}
         >
-          <BadgeOutlinedIcon />
+          <BadgeOutlinedIcon  sx={{mr:1}}/>
           <ListItemText primary="Other Info" />
         </ListItemButton>
       </Box>

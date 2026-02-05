@@ -16,8 +16,8 @@ import OtpVerification from "../pages/OtpVerification";
 import Holidays from "../pages/Holidays";
 import SettingLayout from "../SettingsLayout/SettingLayout";
 import Profile from "../SettingsPages/Profile";
-
-import PrivateRoute from "../Route/index"; // ✅ import
+// import PersonalInfo from "../SettingsPages/PersonalInfo";
+import PrivateRoute from "../Route/PrivateRoute"; // ✅ import
 // import Profile from "../pages/Profile";
 
 const MainLayout = () => {
@@ -118,9 +118,9 @@ const MainLayout = () => {
             <Route
               path="/settings/*"
               element={
-                <PrivateRoute>
-                  <SettingLayout />
-                </PrivateRoute>
+                // <PrivateRoute>
+                <SettingLayout />
+                // </PrivateRoute>
               }
             />
 

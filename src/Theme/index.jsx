@@ -118,6 +118,20 @@ const theme = createTheme({
           },
         },
         {
+          props: { variant: "black-Size" },
+          style: {
+            fontWeight: 600,
+            fontSize: "10px",
+            backgroundColor: "#111",
+            color: "#fff",
+            padding: "10px 16px",
+            borderRadius: "8px",
+            "&:hover": {
+              backgroundColor: "#000",
+            },
+          },
+        },
+        {
           props: { variant: "error" },
           style: {
             textTransform: "none",
@@ -263,22 +277,46 @@ const theme = createTheme({
         },
       },
     },
+    MuiTextField: {
+      defaultProps: {
+        variant: "outlined",
+      },
+    },
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
-          fontSize: 12,
+          borderRadius: 16,
+          backgroundColor: "#FFFFFF",
+          fontSize: 14,
+          height: "48px",
 
           "& .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#637381", // normal
+            borderColor: "#d0d5dd",
           },
 
+          /* ❌ HOVER COMPLETELY NEUTRAL */
           "&:hover .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#637381",
+            borderColor: "#d0d5dd",
           },
 
+          /* ✅ MOUSE CLICK (ACTIVE) */
+          "&:active .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#000",
+            borderWidth: "2px",
+          },
+
+          /* ✅ FOCUS (CURSOR INSIDE) */
           "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#637381", // 👈 blue hat gaya
-            borderWidth: "1px",
+            borderColor: "#000",
+            borderWidth: "2px",
+          },
+        },
+
+        input: {
+          padding: "14px 16px",
+          "&::placeholder": {
+            color: "#919EAB",
+            opacity: 1,
           },
         },
       },

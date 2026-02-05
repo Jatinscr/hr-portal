@@ -8,11 +8,12 @@ import Skills from "../SettingsPages/Skills";
 import Experience from "../SettingsPages/Experience";
 import Education from "../SettingsPages/Education";
 import OtherInfo from "../SettingsPages/OtherInfo";
+import PersonalInfo from "../SettingsPages/PersonalInfo ";
 
 const SettingLayout = () => {
   return (
     <>
-    {/* <Box>settings</Box> */}
+      {/* <Box>settings</Box> */}
       <Paper
         elevation={0}
         sx={{
@@ -31,16 +32,16 @@ const SettingLayout = () => {
         <Box sx={{ flex: 1, p: 4 }}>
           <Routes>
             {/* /settings */}
-            <Route index element={<Profile />} />
+            <Route index element={<PersonalInfo />} />
 
             {/* /settings/profile */}
-            <Route path="profile" element={<Profile />} />
-            <Route path="profile/basic-info" element={<BasicInfo />} />
-            <Route path="profile/projects" element={<ProjectsInfo />} />
-            <Route path="profile/skills" element={<Skills />} />
-            <Route path="profile/experience" element={<Experience />} />
-            <Route path="profile/education" element={<Education />} />
-            <Route path="profile/other-info" element={<OtherInfo />} />
+            <Route path="PersonalInfo" element={<PersonalInfo />} />
+            <Route path="PersonalInfo/basic-info" element={<BasicInfo />} />
+            <Route path="PersonalInfo/projects" element={<ProjectsInfo />} />
+            <Route path="PersonalInfo/skills" element={<Skills />} />
+            <Route path="PersonalInfo/experience" element={<Experience />} />
+            <Route path="PersonalInfo/education" element={<Education />} />
+            <Route path="PersonalInfo/other-info" element={<OtherInfo />} />
           </Routes>
         </Box>
       </Paper>
