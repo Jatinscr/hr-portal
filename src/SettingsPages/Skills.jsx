@@ -15,6 +15,22 @@ function SkillsInfo() {
     experience: "",
     certificate: null,
   });
+  const [skillInput, setSkillInput] = useState({
+    skillName: "",
+    level: "",
+  });
+  const [skills, setSkills] = useState([]);
+  const addSkill = () => {
+    if (!skillInput.skillName || !skillInput.level) return;
+    setSkills([
+      ...skills,
+      {
+        skillName: skillInput.skillName,
+        level: skillInput.level,
+      },
+    ]);
+    setSkillInput({ skillName: "", level: "" });
+  };
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -56,40 +72,101 @@ function SkillsInfo() {
       <Typography variant="h8" sx={{ mb: 3, letterSpacing: 1.5 }}>
         Skills & Certifications
       </Typography>
-
-      <Grid container spacing={3}>
-        {/* Skill Name */}
-        <Grid item xs={12} md={4}>
-          <Typography variant="body2">Skill Name</Typography>
+      {/* Skill Name */}
+      {/* <Grid item xs={12}>
+        <Grid container spacing={2}>
+          <Grid item md={6}> */}
+      <Box
+        sx={{ display: "flex", justifyContent: "flex-start", gap: 3, mt: 2 }}
+      >
+        <Box sx={{ flex: 1 }}>
+          <Typography variant="body2" sx={{ mb: 1 }}>
+            Skill Name
+          </Typography>
           <TextField
             fullWidth
             name="skillName"
-            placeholder="e.g. React"
-            value={form.skillName}
-            onChange={handleChange}
+            placeholder="Enter Your Skills"
+            value={skillInput.skillName}
+            onChange={(e) =>
+              /^[a-zA-Z ]*$/.test(e.target.value) &&
+              setSkillInput({ ...skillInput, skillName: e.target.value })
+            }
           />
-        </Grid>
+        </Box>
+        {/* </Grid> */}
 
         {/* Skill Level */}
-        <Grid item xs={12} md={4}>
-          <Typography variant="body2">Level</Typography>
+        {/* // <Grid item  md={6}> */}
+        <Box sx={{ flex: 1 }}>
+          <Typography variant="body2" sx={{ mb: 1 }}>
+            Level
+          </Typography>
           <TextField
             select
             fullWidth
             name="level"
-            value={form.level}
-            onChange={handleChange}
+            value={skillInput.level}
+            onChange={(e) =>
+              setSkillInput({ ...skillInput, level: e.target.value })
+            }
           >
             <MenuItem value="">Select</MenuItem>
             <MenuItem value="beginner">Beginner</MenuItem>
             <MenuItem value="intermediate">Intermediate</MenuItem>
             <MenuItem value="expert">Expert</MenuItem>
           </TextField>
-        </Grid>
+        </Box>
+      </Box>
+      {skills.length > 0 && (
+        <Box sx={{ mt: 3 }}>
+          <Typography variant="body2" sx={{ mb: 1 }}>
+            Your skills
+          </Typography>
+          {skills.map((item, index) => (
+            <Box
+              key={index}
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                p: 1.5,
+                mb: 1,
+                border: "1px solid #ddd",
+                borderRadius: "10px",
+              }}
+            >
+              <Typography>{item.skillName}</Typography>
+              <Typography color="#111">{item.level}</Typography>
+            </Box>
+          ))}
+        </Box>
+      )}
 
+      {/* </Grid>
+        </Grid> */}
+      <Box sx={{ display: "flex", mt: 2 }}>
+        <Button
+          // fullWidth
+          variant="black-Size"
+          // sx={{ height: "48px", borderRadius: "12px" }}
+          onClick={addSkill}
+        >
+          Add
+        </Button>
+        {/* </Grid> */}
+      </Box>
+      <Box sx={{ mt: 4 }}>
+        {" "}
+        <Typography variant="h8" sx={{ letterSpacing: 1.5 }}>
+          Certifications
+        </Typography>
+      </Box>
+      <Grid container spacing={3} sx={{ mt: 2 }}>
         {/* Years of Experience */}
         <Grid item xs={12} md={4}>
-          <Typography variant="body2">Years of Experience</Typography>
+          <Typography variant="body2" sx={{ mb: 1 }}>
+            Years of Experience
+          </Typography>
           <TextField
             fullWidth
             name="experience"
@@ -101,18 +178,21 @@ function SkillsInfo() {
 
         {/* Certificate Upload */}
         <Grid item xs={12} md={6}>
-          <Typography variant="body2">Upload Certificate</Typography>
+          <Typography variant="body2" sx={{ mb: 1 }}>
+            Upload Certificate
+          </Typography>
 
           <Button
             variant="outlined"
             component="label"
             sx={{
-              mt: 1,
+              // mt: 1,
               width: "100%",
+
               justifyContent: "flex-start",
               textTransform: "none",
               borderRadius: "12px",
-              height: "56px",
+              height: "48px",
             }}
           >
             {form.certificate ? form.certificate.name : "Upload PDF / Image"}

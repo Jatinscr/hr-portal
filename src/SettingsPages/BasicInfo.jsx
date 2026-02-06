@@ -42,10 +42,7 @@ function AdditionalInfo() {
 
     // Experience → numbers only
     if (name === "experience") {
-      if (!/^[0-9]*$/.test(value)) return;
-
-      setForm((prev) => ({ ...prev, experience: value }));
-      return;
+      if (!/^\d{0,2}(\.\d?)?$/.test(value)) return;
     }
 
     // Role Summary & Bio → everything allowed
